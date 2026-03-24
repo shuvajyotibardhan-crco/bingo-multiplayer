@@ -47,11 +47,4 @@ Pool is shuffled, then sliced per player
 - Phase transitions driven by `room.status` changes via `onSnapshot` in App.jsx
 
 ## .env (not in git)
-```
-VITE_FIREBASE_API_KEY=AIzaSyALIS4BWI7nRKzbgkQiWpyKQVjoNvQR-kE
-VITE_FIREBASE_AUTH_DOMAIN=bingo-game-b09b8.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=bingo-game-b09b8
-VITE_FIREBASE_STORAGE_BUCKET=bingo-game-b09b8.firebasestorage.app
-VITE_FIREBASE_MESSAGING_SENDER_ID=382232305988
-VITE_FIREBASE_APP_ID=1:382232305988:web:1d123b363e179338703711
-```
+See `.env.example` for required variable names. Never commit actual credentials.

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Bingo Multiplayer is a real-time, browser-based multiplayer bingo game. Players create or join rooms using a shared code and compete to mark called numbers on their cards. The first player to complete a row, column, diagonal, or full card wins that category. The game supports 2–8 human players and an AI bot mode for solo play. No account or login is required.
+Bingo Multiplayer is a real-time, browser-based multiplayer bingo game. Players create or join rooms using a shared code and compete to mark called numbers on their cards. The first player to complete a row, column, diagonal, or full card wins that category. The game supports 2–8 human players and an AI bot mode for solo play. A Paper / Offline mode generates printable bingo cards and a call-out list as a downloadable PDF for in-person play. No account or login is required.
 
 ## Scope
 
@@ -17,6 +17,7 @@ Bingo Multiplayer is a real-time, browser-based multiplayer bingo game. Players 
 - Real-time leaderboard and win notifications
 - Host controls: pause, resume, end game
 - Results screen with category winners and all-player summary
+- Paper / Offline mode: generate cards + call-out list as a downloadable PDF
 
 ### Out of Scope
 - User accounts or persistent profiles
@@ -242,3 +243,33 @@ Bingo Multiplayer is a real-time, browser-based multiplayer bingo game. Players 
 | Game ends | Results screen shown to all players |
 | View results | All 4 categories shown; unclaimed shown as empty |
 | Click Play Again | Home screen shown |
+
+---
+
+## Feature 11 — Paper / Offline Mode
+
+**User story:** As an organiser, I want to generate printed bingo cards and a call-out list so that I can run a game in person without any device per player.
+
+**Acceptance Criteria:**
+1. User **shall** be able to access Paper / Offline mode from the home screen without creating a room.
+2. User **shall** set the number of players (2–20).
+3. System **shall** generate one unique 5×5 bingo card per player using the same uniqueness algorithm as the online mode.
+4. System **shall** generate a shuffled call-out list containing all 99 numbers (1–99) in random order.
+5. User **shall** be able to download a PDF containing all cards and the call-out list.
+6. PDF **must** include one card per player, labelled "Player 1", "Player 2", etc., with BINGO column headers and a FREE centre cell.
+7. PDF **must** include a final page with all 99 numbers in shuffled order, numbered 1–99 for the caller.
+8. Cards **must** fit up to 4 per A4 page for compact printing.
+9. Generating new cards **shall** replace the previous set (no accumulation).
+10. PDF generation **must** be client-side only — no server or network request.
+
+**Test Plan:**
+
+| Step | Expected Result |
+|------|----------------|
+| Click "Paper / Offline" on home screen | PaperScreen shown; player count input defaulted to 4 |
+| Set player count to 6, click Generate Cards | "Ready to download" confirmation shown; Download PDF enabled |
+| Click Download PDF | PDF file downloaded; contains 6 cards across pages + call-out page |
+| Inspect PDF cards | Each card has BINGO header, FREE centre, 24 unique numbers |
+| Inspect call-out page | All 99 numbers present, shuffled, numbered 1–99 |
+| Click Generate Cards again | New card set generated (numbers reshuffled) |
+| Click Back to Home | Home screen shown; no room created in Firestore |

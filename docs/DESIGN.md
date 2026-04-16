@@ -16,6 +16,9 @@ Browser (React SPA)
   │     ├── subscribePlayers() ──► Firestore onSnapshot (players subcollection)
   │     │
   │     ├── HomeScreen          No external deps
+  │     ├── PaperScreen
+  │     │     ├── generateCards()     ──► cardGenerator.js
+  │     │     └── jsPDF (lazy import) ──► client-side PDF generation
   │     ├── SetupScreen
   │     │     ├── generateRoomCode()  ──► cardGenerator.js
   │     │     ├── generateCards()     ──► cardGenerator.js
@@ -87,9 +90,17 @@ Pure functions used for client-side display only (not authoritative):
 - `getAvailableClaims(card, calledSet, globalWins, playerClaimedWins)` — filters out already-won and already-claimed categories
 - `getWinningCells(card, calledSet, winType)` — returns a `Set` of flat cell indices forming the winning pattern (used for cell highlighting)
 
+### `src/components/PaperScreen.jsx`
+Fully self-contained screen for the Paper / Offline mode. No Firestore interaction. Responsibilities:
+- Player count input (2–20); calls `generateCards()` from the shared engine
+- Generates a shuffled 1–99 call-out list client-side
+- Lazily imports `jspdf` on first download click (keeps initial bundle lean)
+- Draws the PDF directly via jsPDF canvas calls: BINGO header row, 5×5 grid with FREE centre, up to 4 cards per A4 page; final page with call-out sequence
+- Saves the file via `jsPDF.save()` — no server involved
+
 ### `src/App.jsx`
 Top-level state controller. Manages:
-- `phase` — `'home' | 'setup' | 'join' | 'lobby' | 'game' | 'results'`
+- `phase` — `'home' | 'setup' | 'join' | 'lobby' | 'game' | 'results' | 'paper'`
 - `config` — room code, player count, mode
 - `room` / `players` — live Firestore data from `onSnapshot` subscriptions
 - Phase transitions driven by Firestore `room.status` changes (lobby → playing → finished)
@@ -146,10 +157,11 @@ In standard bingo, all players draw from the same pool of numbers. To replicate 
 | UI Framework | React 19 | Component model suits the per-screen game flow |
 | Language | JavaScript (JSX) | No TypeScript; simpler for a small project |
 | Styling | Tailwind CSS v4 | Utility-first; Vite-native plugin |
-| Build | Vite 6 | Fast HMR, ESM-first |
+| Build | Vite 6 | Fast HMR, ESM-first; lazy chunks via dynamic import |
 | Database / Real-time | Cloud Firestore | Real-time onSnapshot; no backend required |
 | Auth | None (UUID in localStorage) | No accounts needed for casual play |
 | Hosting | Firebase Hosting | CDN, SPA rewrites, free tier |
+| PDF Generation | jsPDF (lazy import) | Client-side PDF for Paper mode; not loaded until first use |
 
 ---
 
@@ -175,4 +187,4 @@ GitHub repo: https://github.com/shuvajyotibardhan-crco/bingo-multiplayer
 | No reconnection handling | If a player disconnects and rejoins mid-game, their marked cells persist in Firestore but the in-memory state may be inconsistent. |
 | Bot AI in host browser | Bots are simulated locally; if the host is slow, bot reactions are slow. |
 | No persistence across sessions | Room codes expire when the game ends; there is no lobby recovery or game history. |
-| Single bundle | No code splitting. Acceptable for current scale. |
+| jsPDF bundle size | jsPDF adds ~390 KB minified to the bundle, loaded lazily only when Paper mode PDF is downloaded. |

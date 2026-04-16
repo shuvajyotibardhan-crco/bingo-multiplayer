@@ -128,6 +128,43 @@ generateRoomCode():
   return 5 random chars from alphabet
 ```
 
+### PDF Generation (`PaperScreen.jsx` — `generatePDF`)
+
+Called client-side when the user clicks "Download PDF". jsPDF is imported lazily.
+
+```
+generatePDF(playerCount, cards, callList):
+  doc = new jsPDF(A4, mm)
+  pageCardCount = 0
+
+  // Cards: 2 columns × 2 rows per page (up to 4 cards per page)
+  for p = 0 to playerCount - 1:
+    if pageCardCount === 4:
+      doc.addPage(); pageCardCount = 0
+    col = pageCardCount % 2
+    row = floor(pageCardCount / 2)
+    drawCard(doc, cards[p], "Player {p+1}", x=col*cardW + margin, y=row*cardH + margin)
+    pageCardCount++
+
+  // Call-out page
+  doc.addPage()
+  draw title "CALL-OUT LIST"
+  for i = 0 to 98:
+    col = i % 11; row = floor(i / 11)
+    draw order number (i+1) in grey
+    draw callList[i] in bold black
+
+  doc.save("bingo-paper-{playerCount}players.pdf")
+
+drawCard(doc, card, label, x, y, cellSize=14mm):
+  draw label text above grid
+  draw BINGO header row (indigo fill, white letters)
+  for each cell:
+    if FREE: purple fill, italic "FREE"
+    else: draw number, bold
+  draw indigo outer border
+```
+
 ### Win Detection (`winDetector.js`)
 
 ```
@@ -256,7 +293,9 @@ BOT_CLAIM_DELAY_MAX = 4000     // ms maximum (800 + random 0–3200)
 WIN_BANNER_DURATION = 5000     // ms before win banner auto-dismisses
 MAX_PLAYER_NAME     = 20       // characters
 MIN_PLAYERS         = 2
-MAX_PLAYERS         = 8
+MAX_PLAYERS         = 8        // online modes
+PAPER_MIN_PLAYERS   = 2        // paper/offline mode
+PAPER_MAX_PLAYERS   = 20       // paper/offline mode
 ROOM_CODE_LENGTH    = 5
 NUMBER_RANGE        = 1–99
 CARD_SIZE           = 5×5 (24 playable + 1 FREE centre)
@@ -297,7 +336,8 @@ Bingo/
     │   └── winDetector.js     checkRow/Col/Diagonal/House, getAvailableClaims, getWinningCells
     │
     └── components/
-        ├── HomeScreen.jsx          Main menu (3 buttons)
+        ├── HomeScreen.jsx          Main menu (4 buttons incl. Paper/Offline)
+        ├── PaperScreen.jsx         Paper/Offline mode: card gen + PDF download
         ├── SetupScreen.jsx         Create room + bot mode
         ├── JoinScreen.jsx          Enter code + name
         ├── LobbyScreen.jsx         Waiting room; real-time player list

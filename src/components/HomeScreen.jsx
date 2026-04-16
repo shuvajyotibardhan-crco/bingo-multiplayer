@@ -35,6 +35,13 @@ export default function HomeScreen({ setPhase, setConfig }) {
         >
           Play vs Computer
         </button>
+
+        <button
+          onClick={() => setPhase('paper')}
+          className="bg-amber-700 hover:bg-amber-600 active:bg-amber-800 text-white font-bold py-4 px-8 rounded-xl text-xl transition-colors shadow-lg"
+        >
+          Paper / Offline
+        </button>
       </div>
     </div>
   )

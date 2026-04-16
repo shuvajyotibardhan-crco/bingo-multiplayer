@@ -5,11 +5,12 @@ import JoinScreen from './components/JoinScreen.jsx'
 import LobbyScreen from './components/LobbyScreen.jsx'
 import GameScreen from './components/GameScreen.jsx'
 import ResultsScreen from './components/ResultsScreen.jsx'
+import PaperScreen from './components/PaperScreen.jsx'
 import { getOrCreatePlayerId } from './engine/cardGenerator.js'
 import { subscribeRoom, subscribePlayers } from './firebase/rooms.js'
 
 export default function App() {
-  const [phase, setPhase] = useState('home') // home | setup | join | lobby | game | results
+  const [phase, setPhase] = useState('home') // home | setup | join | lobby | game | results | paper
   const [config, setConfig] = useState({
     roomCode: null,
     playerId: getOrCreatePlayerId(),
@@ -82,6 +83,7 @@ export default function App() {
       {phase === 'lobby' && <LobbyScreen {...commonProps} />}
       {phase === 'game' && <GameScreen {...commonProps} />}
       {phase === 'results' && <ResultsScreen {...commonProps} />}
+      {phase === 'paper' && <PaperScreen goHome={goHome} />}
     </div>
   )
 }

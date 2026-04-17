@@ -253,9 +253,9 @@ Bingo Multiplayer is a real-time, browser-based multiplayer bingo game. Players 
 **Acceptance Criteria:**
 1. User **shall** be able to access Paper / Offline mode from the home screen without creating a room.
 2. User **shall** set the number of players (2–20) using − / + buttons, consistent with the Create Game screen.
-3. System **shall** generate one unique 5×5 bingo card per player using the same uniqueness algorithm as the online mode.
-4. System **shall** generate a shuffled call-out list containing all 99 numbers (1–99) in random order.
-5. User **shall** be able to download a PDF containing all cards and the call-out list.
+3. A single "Download PDF" button **shall** generate cards, generate a shuffled call-out list, and download the PDF in one action.
+4. System **shall** generate one unique 5×5 bingo card per player using the same uniqueness algorithm as the online mode.
+5. System **shall** generate a shuffled call-out list containing all 99 numbers (1–99) in random order.
 6. PDF **must** include one card per player, labelled "Player 1", "Player 2", etc., with BINGO column headers and a FREE centre cell.
 7. PDF **must** include a final page with all 99 numbers in shuffled order, numbered 1–99 for the caller.
 8. Cards **must** fit up to 4 per A4 page for compact printing.
@@ -267,8 +267,7 @@ Bingo Multiplayer is a real-time, browser-based multiplayer bingo game. Players 
 | Step | Expected Result |
 |------|----------------|
 | Click "Paper / Offline" on home screen | PaperScreen shown; player count defaults to 4, shown between − and + buttons |
-| Tap + / − to set player count to 6, click Generate Cards | "Ready to download" confirmation shown; Download PDF enabled |
-| Click Download PDF | PDF file downloaded; contains 6 cards across pages + call-out page |
+| Tap + / − to set player count to 6, click Download PDF | PDF file downloaded; contains 6 cards across pages + call-out page |
 | Inspect PDF cards | Each card has BINGO header, FREE centre, 24 unique numbers |
 | Inspect call-out page | All 99 numbers present, shuffled, numbered 1–99 |
 | Click Generate Cards again | New card set generated (numbers reshuffled) |

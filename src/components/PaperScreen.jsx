@@ -156,20 +156,14 @@ async function generatePDF(playerCount, cards, callList) {
 
 export default function PaperScreen({ goHome }) {
   const [playerCount, setPlayerCount] = useState(4)
-  const [generated, setGenerated] = useState(null)
-
-  function handleGenerate() {
-    const cards = generateCards(playerCount)
-    const callList = shuffle(Array.from({ length: 99 }, (_, i) => i + 1))
-    setGenerated({ cards, callList })
-  }
 
   const [downloading, setDownloading] = useState(false)
 
   async function handleDownload() {
-    if (!generated) return
     setDownloading(true)
-    await generatePDF(playerCount, generated.cards, generated.callList)
+    const cards = generateCards(playerCount)
+    const callList = shuffle(Array.from({ length: 99 }, (_, i) => i + 1))
+    await generatePDF(playerCount, cards, callList)
     setDownloading(false)
   }
 
@@ -189,12 +183,12 @@ export default function PaperScreen({ goHome }) {
           </label>
           <div className="flex items-center gap-3">
             <button
-              onClick={() => { setPlayerCount(p => Math.max(2, p - 1)); setGenerated(null) }}
+              onClick={() => setPlayerCount(p => Math.max(2, p - 1))}
               className="bg-slate-700 hover:bg-slate-600 text-white w-10 h-10 rounded-lg font-bold text-xl flex items-center justify-center"
             >-</button>
             <span className="text-white text-2xl font-bold w-12 text-center">{playerCount}</span>
             <button
-              onClick={() => { setPlayerCount(p => Math.min(20, p + 1)); setGenerated(null) }}
+              onClick={() => setPlayerCount(p => Math.min(20, p + 1))}
               className="bg-slate-700 hover:bg-slate-600 text-white w-10 h-10 rounded-lg font-bold text-xl flex items-center justify-center"
             >+</button>
           </div>
@@ -202,29 +196,12 @@ export default function PaperScreen({ goHome }) {
         </div>
 
         <button
-          onClick={handleGenerate}
-          className="bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl text-lg transition-colors shadow-lg"
+          onClick={handleDownload}
+          disabled={downloading}
+          className="bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 disabled:opacity-60 text-white font-bold py-3 px-6 rounded-xl text-lg transition-colors shadow-lg"
         >
-          Generate Cards
+          {downloading ? 'Generating…' : 'Download PDF'}
         </button>
-
-        {generated && (
-          <div className="flex flex-col gap-3">
-            <div className="bg-slate-700 rounded-xl p-4 text-center">
-              <p className="text-emerald-400 font-bold text-sm">Ready to download</p>
-              <p className="text-slate-300 text-xs mt-1">
-                {playerCount} bingo card{playerCount > 1 ? 's' : ''} + call-out list (99 numbers)
-              </p>
-            </div>
-            <button
-              onClick={handleDownload}
-              disabled={downloading}
-              className="bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 disabled:opacity-60 text-white font-bold py-3 px-6 rounded-xl text-lg transition-colors shadow-lg"
-            >
-              {downloading ? 'Generating…' : 'Download PDF'}
-            </button>
-          </div>
-        )}
       </div>
 
       <button

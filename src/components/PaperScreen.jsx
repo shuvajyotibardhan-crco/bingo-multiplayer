@@ -187,18 +187,17 @@ export default function PaperScreen({ goHome }) {
           <label className="text-slate-300 font-semibold text-sm">
             Number of Players
           </label>
-          <input
-            type="number"
-            min={2}
-            max={20}
-            value={playerCount}
-            onChange={e => {
-              const v = Math.max(2, Math.min(20, parseInt(e.target.value) || 2))
-              setPlayerCount(v)
-              setGenerated(null)
-            }}
-            className="bg-slate-700 text-white text-center text-2xl font-bold rounded-xl py-3 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => { setPlayerCount(p => Math.max(2, p - 1)); setGenerated(null) }}
+              className="bg-slate-700 hover:bg-slate-600 text-white w-10 h-10 rounded-lg font-bold text-xl flex items-center justify-center"
+            >-</button>
+            <span className="text-white text-2xl font-bold w-12 text-center">{playerCount}</span>
+            <button
+              onClick={() => { setPlayerCount(p => Math.min(20, p + 1)); setGenerated(null) }}
+              className="bg-slate-700 hover:bg-slate-600 text-white w-10 h-10 rounded-lg font-bold text-xl flex items-center justify-center"
+            >+</button>
+          </div>
           <p className="text-slate-500 text-xs text-center">2 – 20 players</p>
         </div>
 

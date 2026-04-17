@@ -252,7 +252,7 @@ Bingo Multiplayer is a real-time, browser-based multiplayer bingo game. Players 
 
 **Acceptance Criteria:**
 1. User **shall** be able to access Paper / Offline mode from the home screen without creating a room.
-2. User **shall** set the number of players (2–20).
+2. User **shall** set the number of players (2–20) using − / + buttons, consistent with the Create Game screen.
 3. System **shall** generate one unique 5×5 bingo card per player using the same uniqueness algorithm as the online mode.
 4. System **shall** generate a shuffled call-out list containing all 99 numbers (1–99) in random order.
 5. User **shall** be able to download a PDF containing all cards and the call-out list.
@@ -266,8 +266,8 @@ Bingo Multiplayer is a real-time, browser-based multiplayer bingo game. Players 
 
 | Step | Expected Result |
 |------|----------------|
-| Click "Paper / Offline" on home screen | PaperScreen shown; player count input defaulted to 4 |
-| Set player count to 6, click Generate Cards | "Ready to download" confirmation shown; Download PDF enabled |
+| Click "Paper / Offline" on home screen | PaperScreen shown; player count defaults to 4, shown between − and + buttons |
+| Tap + / − to set player count to 6, click Generate Cards | "Ready to download" confirmation shown; Download PDF enabled |
 | Click Download PDF | PDF file downloaded; contains 6 cards across pages + call-out page |
 | Inspect PDF cards | Each card has BINGO header, FREE centre, 24 unique numbers |
 | Inspect call-out page | All 99 numbers present, shuffled, numbered 1–99 |

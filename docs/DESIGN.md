@@ -92,7 +92,7 @@ Pure functions used for client-side display only (not authoritative):
 
 ### `src/components/PaperScreen.jsx`
 Fully self-contained screen for the Paper / Offline mode. No Firestore interaction. Responsibilities:
-- Player count input (2–20); calls `generateCards()` from the shared engine
+- Player count selector (2–20) using − / + buttons, matching the Create Game screen; calls `generateCards()` from the shared engine
 - Generates a shuffled 1–99 call-out list client-side
 - Lazily imports `jspdf` on first download click (keeps initial bundle lean)
 - Draws the PDF directly via jsPDF canvas calls: BINGO header row, 5×5 grid with FREE centre, up to 4 cards per A4 page; final page with call-out sequence

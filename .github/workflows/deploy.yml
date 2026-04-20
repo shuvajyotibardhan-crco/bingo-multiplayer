@@ -36,7 +36,39 @@ jobs:
           SA_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |
           printf '%s' "$SA_JSON" > /tmp/sa.json
-          GOOGLE_APPLICATION_CREDENTIALS=/tmp/sa.json ./node_modules/.bin/firebase deploy --only firestore:rules --project bingo-game-b09b8 --non-interactive
+          gcloud auth activate-service-account --key-file=/tmp/sa.json --quiet
+          TOKEN=$(gcloud auth print-access-token)
+          PROJECT=bingo-game-b09b8
+
+          RULES=$(python3 -c "import json; print(json.dumps(open('firestore.rules').read()))")
+
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"source\":{\"files\":[{\"name\":\"firestore.rules\",\"content\":$RULES}]}}" \
+            "https://firebaserules.googleapis.com/v1/projects/$PROJECT/rulesets")
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | head -n -1)
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "Failed to create ruleset (HTTP $HTTP_CODE): $BODY"
+            exit 1
+          fi
+
+          RULESET=$(echo "$BODY" | python3 -c "import sys,json; print(json.load(sys.stdin)['name'])")
+          echo "Created ruleset: $RULESET"
+
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X PATCH \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"name\":\"projects/$PROJECT/releases/cloud.firestore\",\"rulesetName\":\"$RULESET\"}" \
+            "https://firebaserules.googleapis.com/v1/projects/$PROJECT/releases/cloud.firestore?updateMask=rulesetName")
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "Failed to update release (HTTP $HTTP_CODE)"
+            exit 1
+          fi
+
+          echo "Firestore rules deployed successfully"
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0

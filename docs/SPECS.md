@@ -69,21 +69,16 @@ Stored in Firestore subcollection `rooms/{roomCode}/players`, document ID = play
 
 ## Firestore Security Rules
 
-```
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /rooms/{roomId} {
-      allow read, write: if true;
-      match /players/{playerId} {
-        allow read, write: if true;
-      }
-    }
-  }
-}
-```
+See `firestore.rules` for the full rule text. Key invariants enforced:
 
-**Note:** Open rules are acceptable for an MVP with no sensitive data. A production deployment should restrict writes to authenticated players who own the document.
+- **Reads**: open to anyone (needed for joining/watching games)
+- **Room create**: requires `status`, `hostId`, `calledNumbers`, `wins`, `mode`, `playerCount`; `calledNumbers` must start empty
+- **Room update**: `hostId` is immutable (prevents hijacking); `calledNumbers` can only grow (prevents uncalling numbers)
+- **Player create**: requires `name`, `isBot`, `card`, `marked`, `claimedWins`; name must be 1–50 chars
+- **Player update**: same required fields must remain present
+- **Deletes**: blocked on both rooms and players
+
+Rules are deployed automatically via GitHub Actions on every push to `main`.
 
 ---
 
@@ -368,6 +363,6 @@ Target: evergreen browsers (Chrome, Firefox, Safari, Edge — current versions).
 
 - Firebase credentials are read from `.env` at build time; `.env` is git-ignored.
 - No Firebase Authentication — player identity is a UUID in `localStorage`. Anyone who obtains a player's UUID could impersonate them within an active game session. Acceptable for a casual family game.
-- Firestore rules are open (`allow read, write: if true`). Suitable for MVP only. A production hardening step would scope writes to the player's own document and room creation.
+- Firestore rules restrict writes: `hostId` is immutable, `calledNumbers` can only grow, deletes are blocked, and player names are validated. Rules are deployed via GitHub Actions on every push to `main`.
 - No user-generated HTML is injected into the DOM via `innerHTML` — React's JSX escaping prevents XSS.
 - Bot AI and number calling run in the host's browser. The host can theoretically manipulate the calling order, but there is no mechanism to prevent this without a server-side caller.

@@ -183,7 +183,7 @@ GitHub repo: https://github.com/shuvajyotibardhan-crco/bingo-multiplayer
 | Constraint | Detail |
 |-----------|--------|
 | Host dependency | Number calling and bot AI run in the host's browser. If the host closes the tab, the game stalls for other players. |
-| Open Firestore rules | Rules allow read/write to anyone. Acceptable for an MVP with no sensitive data; should be tightened for public deployment. |
+| No server-side auth | Firestore rules enforce structural integrity (immutable hostId, append-only calledNumbers, no deletes) but cannot verify player identity without Firebase Auth. A determined attacker could spoof writes using another player's UUID. |
 | No reconnection handling | If a player disconnects and rejoins mid-game, their marked cells persist in Firestore but the in-memory state may be inconsistent. |
 | Bot AI in host browser | Bots are simulated locally; if the host is slow, bot reactions are slow. |
 | No persistence across sessions | Room codes expire when the game ends; there is no lobby recovery or game history. |

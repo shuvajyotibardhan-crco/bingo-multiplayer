@@ -66,7 +66,7 @@ jobs:
           PATCH_RESP=$(curl -s -w "\n%{http_code}" -X PATCH \
             -H "Authorization: Bearer $TOKEN" \
             -H "Content-Type: application/json" \
-            -d "{\"name\":\"projects/$PROJECT/releases/cloud.firestore\",\"rulesetName\":\"$RULESET\"}" \
+            -d "{\"release\":{\"name\":\"projects/$PROJECT/releases/cloud.firestore\",\"rulesetName\":\"$RULESET\"}}" \
             "https://firebaserules.googleapis.com/v1/projects/$PROJECT/releases/cloud.firestore")
           PATCH_CODE=$(echo "$PATCH_RESP" | tail -1)
           PATCH_BODY=$(echo "$PATCH_RESP" | head -n -1)

@@ -78,7 +78,7 @@ See `firestore.rules` for the full rule text. Key invariants enforced:
 - **Player update**: same required fields must remain present
 - **Deletes**: blocked on both rooms and players
 
-Rules are deployed automatically via GitHub Actions on every push to `main`.
+Rules are deployed automatically via GitHub Actions on every push to `main`. The workflow uses the Firebase Rules REST API directly (not `firebase-tools`): it creates a new ruleset via POST, then PATCHes the `cloud.firestore` release using `UpdateReleaseRequest` format (fields wrapped under a `release` key). Authentication uses a `gcloud` service account.
 
 ---
 
@@ -361,7 +361,7 @@ Target: evergreen browsers (Chrome, Firefox, Safari, Edge — current versions).
 
 ## Security Notes
 
-- Firebase credentials are read from `.env` at build time; `.env` is git-ignored.
+- Firebase credentials are read from `.env` at build time; `.env` and Firebase service account JSON files (`*-firebase-adminsdk-*.json`) are git-ignored.
 - No Firebase Authentication — player identity is a UUID in `localStorage`. Anyone who obtains a player's UUID could impersonate them within an active game session. Acceptable for a casual family game.
 - Firestore rules restrict writes: `hostId` is immutable, `calledNumbers` can only grow, deletes are blocked, and player names are validated. Rules are deployed via GitHub Actions on every push to `main`.
 - No user-generated HTML is injected into the DOM via `innerHTML` — React's JSX escaping prevents XSS.

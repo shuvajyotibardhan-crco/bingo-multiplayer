@@ -167,11 +167,19 @@ In standard bingo, all players draw from the same pool of numbers. To replicate 
 
 ## Deployment
 
-1. Run `npm run build` — Vite bundles to `dist/`
-2. Run `firebase deploy --only hosting`
-3. Firebase Hosting serves `dist/` at `https://bingo-game-b09b8.web.app`
-4. All routes rewrite to `index.html` (SPA mode, configured in `firebase.json`)
-5. `.env` is never committed — must be present locally for build
+Deployment is fully automated via GitHub Actions (`.github/workflows/deploy.yml`) on every push to `main`. No manual `firebase deploy` step is needed or supported on this machine.
+
+**Workflow steps:**
+1. Checkout and install dependencies (`npm ci`)
+2. Build with Vite — env vars injected from GitHub Actions Secrets
+3. Deploy Firestore security rules via the Firebase Rules REST API:
+   - Authenticate with `gcloud` using the `FIREBASE_SERVICE_ACCOUNT` secret
+   - POST the rules source to create a new ruleset
+   - PATCH the `cloud.firestore` release to point to the new ruleset
+   - Uses `UpdateReleaseRequest` format: body must wrap fields under a `release` key
+4. Deploy hosting via `FirebaseExtended/action-hosting-deploy@v0`
+
+Firebase Hosting serves `dist/` at `https://bingo-game-b09b8.web.app`. All routes rewrite to `index.html` (SPA mode, configured in `firebase.json`). `.env` is never committed — env vars live in GitHub Secrets.
 
 Firebase project: `bingo-game-b09b8`
 GitHub repo: https://github.com/shuvajyotibardhan-crco/bingo-multiplayer

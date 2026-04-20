@@ -58,11 +58,6 @@ jobs:
           RULESET=$(echo "$BODY" | python3 -c "import sys,json; print(json.load(sys.stdin)['name'])")
           echo "Created ruleset: $RULESET"
 
-          echo "=== Existing releases ==="
-          curl -s -H "Authorization: Bearer $TOKEN" \
-            "https://firebaserules.googleapis.com/v1/projects/$PROJECT/releases" | \
-            python3 -c "import sys,json; data=json.load(sys.stdin); [print(json.dumps(r)) for r in data.get('releases',[])]"
-
           PATCH_RESP=$(curl -s -w "\n%{http_code}" -X PATCH \
             -H "Authorization: Bearer $TOKEN" \
             -H "Content-Type: application/json" \

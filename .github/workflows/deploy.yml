@@ -58,13 +58,15 @@ jobs:
           RULESET=$(echo "$BODY" | python3 -c "import sys,json; print(json.load(sys.stdin)['name'])")
           echo "Created ruleset: $RULESET"
 
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X PATCH \
+          PATCH_RESP=$(curl -s -w "\n%{http_code}" -X PATCH \
             -H "Authorization: Bearer $TOKEN" \
             -H "Content-Type: application/json" \
-            -d "{\"name\":\"projects/$PROJECT/releases/cloud.firestore\",\"rulesetName\":\"$RULESET\"}" \
+            -d "{\"rulesetName\":\"$RULESET\"}" \
             "https://firebaserules.googleapis.com/v1/projects/$PROJECT/releases/cloud.firestore?updateMask=rulesetName")
-          if [ "$HTTP_CODE" != "200" ]; then
-            echo "Failed to update release (HTTP $HTTP_CODE)"
+          PATCH_CODE=$(echo "$PATCH_RESP" | tail -1)
+          PATCH_BODY=$(echo "$PATCH_RESP" | head -n -1)
+          echo "PATCH response ($PATCH_CODE): $PATCH_BODY"
+          if [ "$PATCH_CODE" != "200" ]; then
             exit 1
           fi
 

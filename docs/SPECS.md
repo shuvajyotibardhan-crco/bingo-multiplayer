@@ -315,7 +315,9 @@ Bingo/
 ├── docs/
 │   ├── REQUIREMENTS.md
 │   ├── DESIGN.md
-│   └── SPECS.md               (this file)
+│   ├── SPECS.md               (this file)
+│   ├── PLAN.md                Delivery plan and milestone tracker
+│   └── architecture.drawio   draw.io architecture diagram (embedded in DESIGN.md)
 │
 └── src/
     ├── main.jsx               ReactDOM.createRoot entry

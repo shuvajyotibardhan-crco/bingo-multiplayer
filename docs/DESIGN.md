@@ -8,53 +8,13 @@ Bingo Multiplayer is a single-page React application with no backend server. All
 
 ## Architecture Diagram
 
-```
-Browser (React SPA)
-  │
-  ├── main.jsx → App.jsx
-  │     ├── subscribeRoom()    ──► Firestore onSnapshot (room doc)
-  │     ├── subscribePlayers() ──► Firestore onSnapshot (players subcollection)
-  │     │
-  │     ├── HomeScreen          No external deps
-  │     ├── PaperScreen
-  │     │     ├── generateCards()     ──► cardGenerator.js
-  │     │     └── jsPDF (lazy import) ──► client-side PDF generation
-  │     ├── SetupScreen
-  │     │     ├── generateRoomCode()  ──► cardGenerator.js
-  │     │     ├── generateCards()     ──► cardGenerator.js
-  │     │     └── createRoom()        ──► rooms.js → Firestore
-  │     ├── JoinScreen
-  │     │     └── joinRoom()          ──► rooms.js → Firestore
-  │     ├── LobbyScreen
-  │     │     ├── generateCards()     ──► cardGenerator.js
-  │     │     └── startGame()         ──► rooms.js → Firestore
-  │     ├── GameScreen
-  │     │     ├── BingoCard           UI component
-  │     │     ├── PlayerList          UI component
-  │     │     ├── NumberCallHistory   UI component
-  │     │     ├── callNumber()        ──► rooms.js → Firestore
-  │     │     ├── markCell()          ──► rooms.js → Firestore
-  │     │     ├── claimWin()          ──► rooms.js → Firestore (transaction)
-  │     │     ├── setPaused()         ──► rooms.js → Firestore
-  │     │     ├── getAvailableClaims() ──► winDetector.js
-  │     │     ├── getWinningCells()    ──► winDetector.js
-  │     │     └── Bot AI logic        (host browser only, no Firestore reads)
-  │     └── ResultsScreen       Display only
-  │
-  ├── Engine (src/engine/)
-  │     ├── cardGenerator.js   Pure functions: card gen, room code, player ID
-  │     └── winDetector.js     Pure functions: row/col/diag/house check
-  │
-  └── Firebase (src/firebase/)
-        ├── config.js          Firebase init from .env
-        └── rooms.js           All Firestore CRUD + claimWin transaction
+![Architecture Diagram](architecture.drawio)
 
-Firestore
-  └── /rooms/{roomCode}
-        ├── (room document: status, calledNumbers, wins, paused…)
-        └── /players/{playerId}
-              └── (player document: card[], marked[], claimedWins[])
-```
+The diagram shows three top-level zones:
+
+- **Browser (React SPA)** — App.jsx phase controller, all screens, UI components, the pure-function engine (cardGenerator, winDetector, jsPDF), and the Firebase SDK wrappers (config.js, rooms.js). Player identity (UUID) is persisted in `localStorage`.
+- **Cloud Firestore** — single `/rooms/{roomCode}` collection; room document holds game state; `/players/{playerId}` subcollection holds per-player card and marked arrays (stored flat, unflattened on read).
+- **GitHub Actions / Firebase Hosting** — `deploy.yml` triggers on push to `main`: builds with Vite, deploys Firestore rules via REST API, deploys hosting via `action-hosting-deploy`. The hosted SPA is served back to browsers at `https://bingo-game-b09b8.web.app`.
 
 ---
 

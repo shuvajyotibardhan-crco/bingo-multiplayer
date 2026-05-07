@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- Title -->
+    <mxCell id="title" value="Bingo Multiplayer — Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="527" y="20" width="600" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- ===== BROWSER / CLIENT LAYER ===== -->
+    <mxCell id="browser" value="Browser (React SPA)" style="swimlane;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+      <mxGeometry x="40" y="80" width="980" height="760" as="geometry" />
+    </mxCell>
+
+    <!-- App.jsx -->
+    <mxCell id="app" value="App.jsx&#xa;(phase controller)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" vertex="1" parent="browser">
+      <mxGeometry x="380" y="50" width="200" height="60" as="geometry" />
+    </mxCell>
+
+    <!-- Screens group -->
+    <mxCell id="screens" value="Screens" style="swimlane;startSize=25;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=11;" vertex="1" parent="browser">
+      <mxGeometry x="30" y="150" width="700" height="220" as="geometry" />
+    </mxCell>
+
+    <mxCell id="homeScreen" value="HomeScreen" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="screens">
+      <mxGeometry x="20" y="50" width="120" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="setupScreen" value="SetupScreen" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="screens">
+      <mxGeometry x="160" y="50" width="120" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="joinScreen" value="JoinScreen" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="screens">
+      <mxGeometry x="300" y="50" width="120" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="lobbyScreen" value="LobbyScreen" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="screens">
+      <mxGeometry x="440" y="50" width="120" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="gameScreen" value="GameScreen&#xa;(host timer + bot AI)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;" vertex="1" parent="screens">
+      <mxGeometry x="160" y="130" width="140" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="resultsScreen" value="ResultsScreen" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="screens">
+      <mxGeometry x="320" y="130" width="120" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="paperScreen" value="PaperScreen&#xa;(offline / PDF)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="screens">
+      <mxGeometry x="460" y="130" width="120" height="60" as="geometry" />
+    </mxCell>
+
+    <!-- UI Components group -->
+    <mxCell id="uiComponents" value="UI Components (src/components/game/)" style="swimlane;startSize=25;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=11;" vertex="1" parent="browser">
+      <mxGeometry x="30" y="400" width="700" height="100" as="geometry" />
+    </mxCell>
+    <mxCell id="bingoCard" value="BingoCard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="uiComponents">
+      <mxGeometry x="20" y="40" width="120" height="45" as="geometry" />
+    </mxCell>
+    <mxCell id="playerList" value="PlayerList" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="uiComponents">
+      <mxGeometry x="160" y="40" width="120" height="45" as="geometry" />
+    </mxCell>
+    <mxCell id="callHistory" value="NumberCallHistory" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="uiComponents">
+      <mxGeometry x="300" y="40" width="140" height="45" as="geometry" />
+    </mxCell>
+
+    <!-- Engine group -->
+    <mxCell id="engine" value="Engine (src/engine/)" style="swimlane;startSize=25;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#333333;fontSize=11;" vertex="1" parent="browser">
+      <mxGeometry x="30" y="530" width="700" height="110" as="geometry" />
+    </mxCell>
+    <mxCell id="cardGen" value="cardGenerator.js&#xa;generateCards()&#xa;generateRoomCode()&#xa;generatePlayerId()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" vertex="1" parent="engine">
+      <mxGeometry x="20" y="35" width="200" height="65" as="geometry" />
+    </mxCell>
+    <mxCell id="winDet" value="winDetector.js&#xa;checkRow/Col/Diagonal/House()&#xa;getAvailableClaims()&#xa;getWinningCells()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" vertex="1" parent="engine">
+      <mxGeometry x="240" y="35" width="210" height="65" as="geometry" />
+    </mxCell>
+    <mxCell id="jspdf" value="jsPDF&#xa;(lazy import)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="engine">
+      <mxGeometry x="470" y="35" width="120" height="65" as="geometry" />
+    </mxCell>
+
+    <!-- Firebase SDK group -->
+    <mxCell id="firebaseSDK" value="Firebase SDK (src/firebase/)" style="swimlane;startSize=25;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#333333;fontSize=11;" vertex="1" parent="browser">
+      <mxGeometry x="750" y="150" width="210" height="230" as="geometry" />
+    </mxCell>
+    <mxCell id="configJs" value="config.js&#xa;Firebase init&#xa;(reads .env)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="firebaseSDK">
+      <mxGeometry x="20" y="40" width="170" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="roomsJs" value="rooms.js&#xa;createRoom / joinRoom / startGame&#xa;callNumber / markCell&#xa;claimWin (transaction)&#xa;subscribeRoom / subscribePlayers" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;" vertex="1" parent="firebaseSDK">
+      <mxGeometry x="20" y="120" width="170" height="90" as="geometry" />
+    </mxCell>
+
+    <!-- localStorage -->
+    <mxCell id="localStorage" value="localStorage&#xa;(playerId UUID)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="browser">
+      <mxGeometry x="760" y="430" width="140" height="70" as="geometry" />
+    </mxCell>
+
+    <!-- Edges inside browser -->
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="app" target="screens" parent="browser">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="app" target="firebaseSDK" parent="browser">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="screens" target="engine" parent="browser">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="screens" target="firebaseSDK" parent="browser">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="gameScreen" target="uiComponents" parent="browser">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="app" target="localStorage" parent="browser">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ===== FIRESTORE ===== -->
+    <mxCell id="firestore" value="Cloud Firestore (Firebase)" style="swimlane;startSize=30;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+      <mxGeometry x="1100" y="80" width="500" height="460" as="geometry" />
+    </mxCell>
+
+    <mxCell id="roomsCol" value="/rooms/{roomCode}" style="swimlane;startSize=25;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="firestore">
+      <mxGeometry x="30" y="50" width="440" height="390" as="geometry" />
+    </mxCell>
+
+    <mxCell id="roomDoc" value="Room Document&#xa;─────────────&#xa;status: lobby | playing | finished&#xa;calledNumbers: number[]&#xa;wins: { ROW, COL, DIAGONAL, HOUSE }&#xa;paused: boolean&#xa;hostId: string&#xa;mode: human | bot&#xa;playerCount: number" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;" vertex="1" parent="roomsCol">
+      <mxGeometry x="20" y="40" width="400" height="140" as="geometry" />
+    </mxCell>
+
+    <mxCell id="playersSubcol" value="/players/{playerId}" style="swimlane;startSize=25;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="roomsCol">
+      <mxGeometry x="20" y="210" width="400" height="160" as="geometry" />
+    </mxCell>
+
+    <mxCell id="playerDoc" value="Player Document&#xa;─────────────&#xa;name: string&#xa;card: number[25]  (flat 5x5)&#xa;marked: boolean[25] (flat 5x5)&#xa;claimedWins: string[]&#xa;isBot: boolean" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;" vertex="1" parent="playersSubcol">
+      <mxGeometry x="20" y="35" width="360" height="110" as="geometry" />
+    </mxCell>
+
+    <!-- ===== CI/CD / HOSTING ===== -->
+    <mxCell id="cicd" value="GitHub Actions (CI/CD)" style="swimlane;startSize=30;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+      <mxGeometry x="1100" y="590" width="500" height="250" as="geometry" />
+    </mxCell>
+
+    <mxCell id="workflow" value="deploy.yml (push to main)&#xa;1. npm ci&#xa;2. vite build (env from Secrets)&#xa;3. Deploy Firestore Rules (REST API)&#xa;4. Deploy Hosting (action-hosting-deploy)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;" vertex="1" parent="cicd">
+      <mxGeometry x="30" y="50" width="440" height="100" as="geometry" />
+    </mxCell>
+
+    <mxCell id="hosting" value="Firebase Hosting&#xa;https://bingo-game-b09b8.web.app&#xa;(serves dist/ — SPA mode)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="cicd">
+      <mxGeometry x="30" y="170" width="440" height="60" as="geometry" />
+    </mxCell>
+
+    <!-- Cross-container edges -->
+    <mxCell id="e7" value="onSnapshot / CRUD / transaction" style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeColor=#d79b00;fontColor=#d79b00;" edge="1" source="roomsJs" target="firestore" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e8" value="git push triggers deploy" style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeColor=#b85450;fontColor=#b85450;" edge="1" source="browser" target="cicd" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e9" value="serves app to users" style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeColor=#b85450;fontColor=#b85450;" edge="1" source="hosting" target="browser" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>
